@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Librify - Welcome</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            padding: 20px;
+        }
+
+        /* Top Navigation Header */
+        header {
+            width: 100%;
+            max-width: 950px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+        }
+
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        header a:hover, header a.active {
+            background: #ffffff;
+            color: #11998e;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Main Content Wrapper Container */
+        .main-container {
+            display: flex;
+            width: 100%;
+            max-width: 950px;
+            height: 600px;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            margin: auto;
+        }
+
+        /* Left Side: Brand Panel (Stays Static) */
+        .left-side {
+            flex: 1.1;
+            background: linear-gradient(135deg, #0b4f35 0%, #178253 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px;
+            position: relative;
+        }
+
+        /* Brand Area Wrap Elements */
+        .brand-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(45deg, #ff007f, #ffaa00, #00f0ff, #7000ff);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Logo Brand Container Typography Wrapper Layout */
+        .logo-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 1.1;
+        }
+
+        .logo-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(to right, #ffffff, #a3f7bf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+            padding-right: 28px;
+        }
+        
+        /* Large high-impact branding TM that scales with text size */
+        .tm-logo-corner {
+            position: absolute;
+            top: -2px;
+            right: 0;
+            font-size: 1.25rem;
+            color: #38ef7d;
+            font-weight: 800;
+            -webkit-text-fill-color: #38ef7d; 
+            letter-spacing: normal;
+        }
+
+        /* Quote Section */
+        .quote-container {
+            max-width: 400px;
+            margin: 40px 0;
+        }
+
+        .quote {
+            font-size: 1.6rem;
+            font-style: italic;
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #e6f9ed;
+        }
+
+        .author {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #38ef7d;
+            font-weight: 600;
+        }
+
+        /* Copyright tag */
+        .copyright {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Right Side: Dynamic Form/Content View */
+        .right-side {
+            flex: 0.9;
+            background-color: #ffffff;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        /* Dynamic Pages View State styling */
+        .view-panel {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 40px 45px;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .view-panel.active-view {
+            display: flex;
+        }
+
+        /* Typography & Structure for Content views */
+        h2 {
+            margin-bottom: 6px;
+            color: #1f3a2b;
+            font-size: 1.7rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #66776d;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Profiles List Block Area */
+        .creators-list-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        /* Profile Space & School Details Card Layout */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background-color: #f4f8f5;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border-left: 4px solid #178253;
+        }
+
+        .photo-placeholder {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background-color: #e1e8e4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            font-size: 1.3rem;
+        }
+
+        .creator-details h3 {
+            color: #1f3a2b;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .creator-details p {
+            color: #55665c;
+            font-size: 0.8rem;
+            line-height: 1.3;
+        }
+
+        /* Form Controls */
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #2c4a39;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e1e8e4;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            color: #1f3a2b;
+            background-color: #ffffff;
+        }
+
+        .input-group textarea {
+            resize: none;
+            height: 75px;
+            font-family: inherit;
+        }
+
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+            outline: none;
+            border-color: #178253;
+            box-shadow: 0 0 0 4px rgba(23, 130, 83, 0.15);
+        }
+
+        /* Show Password Toggle Checkbox Area Layout styling */
+        .password-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #55665c;
+            cursor: pointer;
+            width: fit-content;
+        }
+
+        .error-message {
+            color: #de3a3a;
+            font-size: 0.85rem;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #55665c;
+            cursor: pointer;
+        }
+
+        .forgot-pass, .back-to-login, .logout-btn {
+            color: #178253;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .forgot-pass:hover, .back-to-login:hover, .logout-btn:hover {
+            text-decoration: underline;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #178253 0%, #11998e 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(23, 130, 83, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(23, 130, 83, 0.3);
+        }
+
+        /* Dashboard & Department Layout Option Rows */
+        .dashboard-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .level-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border: 2px solid #e1e8e4;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+        }
+
+        .level-card:hover {
+            border-color: #178253;
+            background-color: #f4f8f5;
+            transform: translateX(5px);
+        }
+
+        .level-info h3 {
+            color: #1f3a2b;
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+        }
+
+        .level-info p {
+            color: #66776d;
+            font-size: 0.8rem;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: #ffffff;
+        }
+
+        .o-badge { background: #11998e; }
+        .a-badge { background: #7000ff; }
+
+        /* Department Thumbnail Layout Styling */
+        .dept-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        .dept-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            border: 2px solid #e1e8e4;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dept-card:hover {
+            border-color: #11998e;
+            background-color: #fafdfb;
+            transform: scale(1.01);
+        }
+
+        .dept-thumbnail {
+            width: 65px;
+            height: 45px;
+            border-radius: 6px;
+            background-color: #e1e8e4;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .dept-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .dept-name {
+            font-weight: 700;
+            color: #1f3a2b;
+            font-size: 1rem;
+        }
+
+        /* Subject Interaction Container styling */
+        .subject-selection-box {
+            background-color: #f4f8f5;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #cce2d7;
+        }
+
+        /* Search Input Styling Box Elements Module */
+        .search-box-wrapper {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .search-input-field {
+            width: 100%;
+            padding: 10px 14px 10px 35px;
+            border: 2px solid #e1e8e4;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #1f3a2b;
+            background-color: #f9fbfd;
+            transition: all 0.2s;
+        }
+        
+        .search-input-field:focus {
+            outline: none;
+            border-color: #11998e;
+            background-color: #ffffff;
+        }
+        
+        .search-icon-lens {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+            color: #889b90;
+            pointer-events: none;
+        }
+
+        /* Book List Container Layout */
+        .books-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 5px 0 15px 0;
+            overflow-y: auto;
+            max-height: 170px;
+            padding-right: 5px;
+        }
+
+        /* Horizontal Row Styles for Book Selection */
+        .book-list-item {
+            background-color: #f9fbfd;
+            border: 1px solid #e1e8e4;
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s;
+            gap: 15px;
+        }
+
+        .book-list-item:hover {
+            border-color: #11998e;
+            background-color: #f4f9f6;
+        }
+
+        .book-item-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: hidden;
+        }
+
+        .book-list-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .book-list-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1f3a2b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .book-list-item .open-list-btn {
+            background-color: #178253;
+            color: #ffffff;
+            border: none;
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .book-list-item .open-list-btn:hover {
+            background-color: #11998e;
+        }
+
+        /* Structured Upload Asset Management Block Box */
+        .upload-section-box {
+            background-color: #f4f8f5;
+            border: 1px dashed #178253;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 5px;
+        }
+
+        .upload-form-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .full-width-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cce2d7;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #1f3a2b;
+            background-color: #ffffff;
+        }
+
+        .file-upload-block {
+            width: 100%;
+            font-size: 0.8rem;
+            color: #55665c;
+            padding: 2px 0;
+        }
+
+        /* Social Interactive Metadata Info Box Layout */
+        .contact-socials-grid {
+            background-color: #f4f8f5;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #e1e8e4;
+        }
+        
+        .social-item-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #2c4a39;
+            margin-bottom: 8px;
+        }
+        
+        .social-item-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .social-label-heading {
+            font-weight: 700;
+            color: #178253;
+            min-width: 110px;
+        }
+
+        /* Catchy Callout Styling for platforms */
+        .connect-pitch-box {
+            background: linear-gradient(135deg, #f4fdf8 0%, #e8f7ee 100%);
+            border: 2px dashed #178253;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(23, 130, 83, 0.05);
+        }
+
+        .connect-pitch-box p {
+            color: #1f3a2b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 600;
+        }
+
+        .connect-pitch-box .highlight-whatsapp {
+            display: inline-block;
+            margin-top: 8px;
+            background-color: #25D366;
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Responsive UI */
+        @media (max-width: 768px) {
+            body {
+                height: auto;
+            }
+            header {
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-bottom: 20px;
+            }
+            .main-container {
+                flex-direction: column;
+                height: auto;
+                max-width: 450px;
+            }
+            .left-side {
+                padding: 30px;
+                gap: 30px;
+            }
+            .quote-container {
+                margin: 15px 0;
+            }
+            .right-side {
+                height: auto;
+            }
+            .view-panel {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <a href="#" id="nav-login" class="active" onclick="switchView('login-view', 'nav-login')">Login</a>
+        <a href="#" id="nav-dashboard" style="display: none;" onclick="switchView('dashboard-view', 'nav-dashboard')">Dashboard</a>
+        <a href="#" id="nav-addnotes" style="display: none;" onclick="switchView('notes-view', 'nav-addnotes')">Add Notes</a>
+        <a href="#" id="nav-about" onclick="switchView('about-view', 'nav-about')">About Us</a>
+        <a href="#" id="nav-contact" onclick="switchView('contact-view', 'nav-contact')">Contact</a>
+    </header>
+
+    <div class="main-container">
+        <!-- Left Static Section -->
+        <div class="left-side">
+            <div class="brand-area">
+                <div class="logo-container">📚</div>
+                <div class="logo-text-wrapper">
+                    <span class="logo-text">Librify<span class="tm-logo-corner">™</span></span>
+                </div>
+            </div>
+
+            <div class="quote-container">
+                <p class="quote">"A room without books is like a body without a soul."</p>
+                <p class="author">— Marcus Tullius Cicero</p>
+            </div>
+
+            <p class="copyright">&copy; 2026 Librify Inc. All rights reserved.</p>
+        </div>
+
+        <!-- Right Dynamic Section -->
+        <div class="right-side">
+            
+            <!-- 1. LOGIN PAGE VIEW -->
+            <div id="login-view" class="view-panel active-view">
+                <h2>Welcome to <span style="position: relative; display: inline-block; padding-right: 22px;">Librify<span class="tm-logo-corner" style="top: -2px; right: 0; font-size: 0.95rem; color: #178253; -webkit-text-fill-color: #178253;">™</span></span></h2>
+                <p class="subtitle" style="margin-top: 8px;">Please enter your details below.</p>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Your username" required autocomplete="username">
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 12px;">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+                    </div>
+                    
+                    <!-- Show Password Checkbox -->
+                    <label class="password-toggle-container">
+                        <input type="checkbox" id="togglePasswordCheckbox" onclick="togglePasswordVisibility()"> Show Password
+                    </label>
+
+                    <div id="errorMessage" class="error-message">Invalid username or password.</div>
+
+                    <button type="submit" class="action-btn">Log In</button>
+                </form>
+            </div>
+
+            <!-- 2. STUDENT DASHBOARD VIEW -->
+            <div id="dashboard-view" class="view-panel">
+                <h2>Student Dashboard</h2>
+                <p class="subtitle">Welcome, Librify User! Select your educational level to proceed.</p>
+
+                <div class="dashboard-options">
+                    <div class="level-card" onclick="selectLevel('O-Level / ZJC')">
+                        <div class="level-info">
+                            <h3>Ordinary Level / ZJC Portal</h3>
+                            <p>Forms 1 to 4 library resources & core texts</p>
+                        </div>
+                        <span class="badge o-badge">O-LEVEL / ZJC</span>
+                    </div>
+
+                    <div class="level-card" onclick="selectLevel('A-Level')">
+                        <div class="level-info">
+                            <h3>Advanced Level Portal</h3>
+                            <p>Forms 5 and 6 deep study resources & materials</p>
+                        </div>
+                        <span class="badge a-badge">A-LEVEL</span>
+                    </div>
+                </div>
+
+                <p><span class="logout-btn" onclick="handleLogout()">&larr; Log Out of Portal</span></p>
+            </div>
+
+            <!-- 3. DEPARTMENT VIEW WITH LIVE MOPSE SUBJECT OPTIONS -->
+            <div id="department-view" class="view-panel">
+                <h2>Select Department</h2>
+                <p class="subtitle">Choose a focus area for your <strong id="selected-level-label">Level</strong> syllabus studies:</p>
+
+                <div class="dept-container">
+                    <!-- Science Dept -->
+                    <div class="dept-card" onclick="loadSubjects('Science')">
+                        <div class="dept-thumbnail">
+                            <img src="C:\Users\admin\Desktop\ANESU-LIBRIFY\science.jpg" alt="Science Equipment">
+                        </div>
+                        <div class="dept-name">Science Department</div>
+                    </div>
+
+                    <!-- Commercial Dept -->
+                    <div class="dept-card" onclick="loadSubjects('Commercial')">
+                        <div class="dept-thumbnail">
+                            <img src="C:\Users\admin\Desktop\ANESU-LIBRIFY\commercials.jpg" alt="Business Chart">
+                        </div>
+                        <div class="dept-name">Commercial Department</div>
+                    </div>
+
+                    <!-- Art Dept -->
+                    <div class="dept-card" onclick="loadSubjects('Art')">
+                        <div class="dept-thumbnail">
+                            <img src="C:\Users\admin\Desktop\ANESU-LIBRIFY\art.jpg" alt="Art Paints">
+                        </div>
+                        <div class="dept-name">Art Department</div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Subject Box Populating depending on Selection -->
+                <div id="subject-selection-zone" class="subject-selection-box" style="display: none;">
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label for="mopse-subjects" style="color:#178253;"><span id="active-dept-title">Department</span> Learning Areas</label>
+                        <select id="mopse-subjects">
+                            <!-- Injected programmatically by JavaScript -->
+                        </select>
+                    </div>
+                    <button class="action-btn" style="padding: 10px;" onclick="accessSubjectMaterials()">Open Learning Materials</button>
+                </div>
+
+                <p style="margin-top:15px;"><span class="back-to-login" onclick="switchView('dashboard-view', 'nav-dashboard')">&larr; Go Back</span></p>
+            </div>
+
+            <!-- 4. LEARNING MATERIALS LIST STORAGE HUB VIEW -->
+            <div id="materials-view" class="view-panel">
+                <h2 id="materials-subject-title">Subject Materials</h2>
+                <p class="subtitle" style="margin-bottom:8px;">Browse stored textbooks or add digital text documents below.</p>
+
+                <!-- Search Input Field -->
+                <div class="search-box-wrapper">
+                    <span class="search-icon-lens">🔍</span>
+                    <input type="text" id="bookSearchInput" class="search-input-field" placeholder="Search uploaded books by title..." oninput="filterBooksList()">
+                </div>
+
+                <!-- Textbooks Dynamic List View Container -->
+                <div id="books-list" class="books-list-container">
+                    <!-- Loaded dynamically via JavaScript -->
+                </div>
+
+                <!-- File Uploader Container Element Module -->
+                <div class="upload-section-box">
+                    <h4 style="font-size:0.75rem; color:#1f3a2b; text-transform:uppercase; margin-bottom:8px; letter-spacing:0.5px;">Upload & Save New Book Asset</h4>
+                    <div class="upload-form-vertical">
+                        <input type="text" id="new-book-title" class="full-width-input" placeholder="Type complete book or document title here...">
+                        <input type="file" id="new-book-file" class="file-upload-block" accept=".pdf,.doc,.docx,.txt">
+                        <button class="action-btn" style="padding: 10px; font-size:0.85rem;" onclick="handleBookUploadSave()">Save Asset to List</button>
+                    </div>
+                </div>
+
+                <p style="margin-top:10px;"><span class="back-to-login" onclick="switchView('department-view', 'nav-dashboard')">&larr; Back to subjects</span></p>
+            </div>
+
+            <!-- 5. ADD NOTES WORKSPACE STORAGE VIEW MODULE -->
+            <div id="notes-view" class="view-panel">
+                <h2>Add Notes</h2>
+                <p class="subtitle">Draft your study notes below and download them directly as text files to your computer.</p>
+                
+                <div class="input-group" style="margin-bottom:12px;">
+                    <label for="note-file-name">Note Title / File Name</label>
+                    <input type="text" id="note-file-name" placeholder="e.g., Physics_Syllabus_Form5_Notes" class="full-width-input">
+                </div>
+
+                <div class="input-group" style="margin-bottom:15px;">
+                    <label for="note-text-content">Notes Workspace Editor</label>
+                    <textarea id="note-text-content" style="height: 180px; font-size:0.95rem; line-height:1.4; padding:12px;" placeholder="Start writing or pasting your educational subject notes here..."></textarea>
+                </div>
+
+                <button type="button" class="action-btn" onclick="saveNoteToLocalPC()">Save Note to PC Device</button>
+                
+                <p style="margin-top:15px;"><span class="back-to-login" onclick="switchView('dashboard-view', 'nav-dashboard')">&larr; Go Back workspace</span></p>
+            </div>
+
+            <!-- 6. ABOUT US VIEW -->
+            <div id="about-view" class="view-panel">
+                <h2>About <span style="position: relative; display: inline-block; padding-right: 22px;">Librify<span class="tm-logo-corner" style="top: -2px; right: 0; font-size: 0.95rem; color: #178253; -webkit-text-fill-color: #178253;">™</span></span></h2>
+                <p class="subtitle" style="margin-top: 8px; margin-bottom:15px;">
+                    Librify is a modern digital ecosystem engineered to streamline how secondary students discover, archive, and master curriculum literature.
+                </p>
+
+                <!-- Twin Profile Cards for Architecture Authors -->
+                <div class="creators-list-wrapper">
+                    <!-- Creator One: Anesu -->
+                    <div class="profile-section">
+                        <div class="photo-placeholder">👤</div>
+                        <div class="creator-details">
+                            <h3>Anesu T. Chinganga</h3>
+                            <p>Creator & Lead Architect of Librify</p>
+                            <p style="font-style: italic; color: #178253; margin-top: 1px;">
+                                Student at Biriiri High School, Chimanimani.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Creator Two: Takunda -->
+                    <div class="profile-section">
+                        <div class="photo-placeholder">👤</div>
+                        <div class="creator-details">
+                            <h3>Takunda J. Musarandega</h3>
+                            <p>UE (User Experience) Designer</p>
+                            <p style="font-style: italic; color: #178253; margin-top: 1px;">
+                                Student at Biriiri High School, Chimanimani.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="subtitle" style="font-size: 0.85rem; margin-bottom:15px;">
+                    Our software helps build custom virtual archives, optimize curriculum management, and empower immediate sharing networks across school clusters.
+                </p>
+                
+                <p><span class="back-to-login" id="about-back-btn" onclick="switchView('login-view', 'nav-login')">&larr; Back to login page</span></p>
+            </div>
+
+            <!-- 7. CONTACT VIEW (UPDATED: Textboxes removed, catchy platform pitch added) -->
+            <div id="contact-view" class="view-panel">
+                <h2>Get in touch</h2>
+                <p class="subtitle">Have questions or feedback? We are here to help!</p>
+                
+                <!-- Catchy Statement for Social Media Redirects -->
+                <div class="connect-pitch-box">
+                    <p>Got a burning question, or need quick academic assistance? Contact us directly on our Whatsapp Number below!</p>
+                </div>
+                
+                <!-- Contact Social Details Box Metadata Box -->
+                <div class="contact-socials-grid">
+                    <div class="social-item-row">
+                        <span class="social-label-heading">📘 Facebook:</span>
+                        <span>Anesu T. Chinganga</span>
+                    </div>
+                    <div class="social-item-row">
+                        <span class="social-label-heading">📸 Instagram:</span>
+                        <span>Anesu T. Chinganga</span>
+                    </div>
+                    <div class="social-item-row">
+                        <span class="social-label-heading">💬 WhatsApp:</span>
+                        <span>+263 78 667 0842</span>
+                    </div>
+                </div>
+
+                <p style="margin-top: 5px; text-align: center;">
+                    <span class="back-to-login" id="contact-back-btn" onclick="switchView('login-view', 'nav-login')">&larr; Back to login page</span>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Interface, Navigation & Authentication Logic -->
+    <script>
+        let isLoggedIn = false;
+        let selectedTier = "";
+        let selectedDept = "";
+        let currentActiveSubject = "";
+
+        const textbookDatabase = {};
+
+        const zimbabweCurriculumData = {
+            "O-Level / ZJC": {
+                "Science": ["Combined Science", "Mathematics","Pure Mathematics", "Biology", "Chemistry", "Physics", "Computer Science", "Geography", "Agriculture"],
+                "Commercial": ["Principles of Accounting"],
+                "Art": ["History", "English", "Shona", "Literature in English", "FRS"]
+            },
+            "A-Level": {
+                "Science": ["Pure Mathematics", "Physics", "Chemistry", "Biology", "Software Engineering", "Statistics", "Geography", "Crop Science"],
+                "Commercial": ["Economics", "Principles Of Accounting", "Business Studies"],
+                "Art": ["History", "Literature in English", "FRS", "Shona"]
+            }
+        };
+
+        function switchView(viewId, navId) {
+            document.querySelectorAll('.view-panel').forEach(panel => {
+                panel.classList.remove('active-view');
+            });
+            document.getElementById(viewId).classList.add('active-view');
+
+            document.querySelectorAll('header a').forEach(link => {
+                link.classList.remove('active');
+            });
+            if(navId) document.getElementById(navId).classList.add('active');
+        }
+
+        function togglePasswordVisibility() {
+            const passField = document.getElementById('password');
+            const toggleCheckbox = document.getElementById('togglePasswordCheckbox');
+            if (toggleCheckbox.checked) {
+                passField.type = 'text';
+            } else {
+                passField.type = 'password';
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const usernameInput = document.getElementById('username').value;
+            const passwordInput = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+
+            if (usernameInput === 'admin' && passwordInput === 'biriiri') {
+                errorDiv.style.display = 'none';
+                isLoggedIn = true;
+                
+                document.getElementById('nav-login').style.display = 'none';
+                document.getElementById('nav-dashboard').style.display = 'inline-block';
+                document.getElementById('nav-addnotes').style.display = 'inline-block';
+                
+                document.getElementById('about-back-btn').innerHTML = '&larr; Back to Dashboard';
+                document.getElementById('about-back-btn').setAttribute('onclick', "switchView('dashboard-view', 'nav-dashboard')");
+                document.getElementById('contact-back-btn').innerHTML = '&larr; Back to Dashboard';
+                document.getElementById('contact-back-btn').setAttribute('onclick', "switchView('dashboard-view', 'nav-dashboard')");
+                
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('togglePasswordCheckbox').checked = false;
+                document.getElementById('password').type = 'password';
+
+                switchView('dashboard-view', 'nav-dashboard');
+            } else {
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        function selectLevel(levelName) {
+            selectedTier = levelName;
+            document.getElementById('selected-level-label').innerText = levelName;
+            document.getElementById('subject-selection-zone').style.display = 'none';
+            switchView('department-view', 'nav-dashboard');
+        }
+
+        function loadSubjects(departmentName) {
+            selectedDept = departmentName;
+            document.getElementById('active-dept-title').innerText = `${selectedTier} ${departmentName}`;
+            
+            const dropdown = document.getElementById('mopse-subjects');
+            dropdown.innerHTML = '';
+            
+            const subjectsList = zimbabweCurriculumData[selectedTier][departmentName];
+            
+            subjectsList.forEach(subject => {
+                let opt = document.createElement('option');
+                opt.value = subject;
+                opt.innerHTML = subject;
+                dropdown.appendChild(opt);
+            });
+            
+            document.getElementById('subject-selection-zone').style.display = 'block';
+        }
+
+        function accessSubjectMaterials() {
+            const finalChosenSubject = document.getElementById('mopse-subjects').value;
+            currentActiveSubject = finalChosenSubject;
+            
+            document.getElementById('materials-subject-title').innerText = `${finalChosenSubject} (${selectedTier})`;
+            
+            document.getElementById('new-book-title').value = '';
+            document.getElementById('new-book-file').value = '';
+            document.getElementById('bookSearchInput').value = '';
+            
+            renderBooksList();
+            switchView('materials-view', 'nav-dashboard');
+        }
+
+        function renderBooksList(filterQuery = '') {
+            const listContainer = document.getElementById('books-list');
+            listContainer.innerHTML = '';
+            
+            const books = textbookDatabase[currentActiveSubject] || [];
+            const filteredBooks = books.filter(b => b.title.toLowerCase().includes(filterQuery.toLowerCase()));
+            
+            if(books.length === 0) {
+                listContainer.innerHTML = `<p style="color:#66776d; font-size:0.85rem; font-style:italic; padding:15px 0;">No books saved for this area yet. Upload one below!</p>`;
+                return;
+            }
+
+            if(filteredBooks.length === 0) {
+                listContainer.innerHTML = `<p style="color:#de3a3a; font-size:0.85rem; font-style:italic; padding:15px 0;">No books found matching your current search query filter.</p>`;
+                return;
+            }
+            
+            filteredBooks.forEach((book) => {
+                const structuralMasterIndex = books.findIndex(originalBook => originalBook.title === book.title);
+                
+                const itemRow = document.createElement('div');
+                itemRow.className = 'book-list-item';
+                itemRow.innerHTML = `
+                    <div class="book-item-meta">
+                        <span class="book-list-icon">📘</span>
+                        <div class="book-list-title" title="${book.title}">${book.title}</div>
+                    </div>
+                    <button class="open-list-btn" onclick="openBookFile('${currentActiveSubject}', ${structuralMasterIndex})">Open</button>
+                `;
+                listContainer.appendChild(itemRow);
+            });
+        }
+
+        function filterBooksList() {
+            const currentSearchValue = document.getElementById('bookSearchInput').value;
+            renderBooksList(currentSearchValue);
+        }
+
+        function handleBookUploadSave() {
+            const titleInput = document.getElementById('new-book-title').value.trim();
+            const fileInput = document.getElementById('new-book-file');
+            
+            if(!titleInput) {
+                alert("Please enter a book title.");
+                return;
+            }
+            if(fileInput.files.length === 0) {
+                alert("Please pick a file to upload first.");
+                return;
+            }
+            
+            const selectedFile = fileInput.files[0];
+            const constructedUrl = URL.createObjectURL(selectedFile);
+            
+            if(!textbookDatabase[currentActiveSubject]) {
+                textbookDatabase[currentActiveSubject] = [];
+            }
+            
+            textbookDatabase[currentActiveSubject].push({
+                title: titleInput,
+                fileUrl: constructedUrl,
+                isMock: false
+            });
+            
+            alert(`"${titleInput}" successfully uploaded and saved to library archive!`);
+            
+            document.getElementById('new-book-title').value = '';
+            fileInput.value = '';
+            document.getElementById('bookSearchInput').value = '';
+            
+            renderBooksList();
+        }
+
+        function saveNoteToLocalPC() {
+            const titleStr = document.getElementById('note-file-name').value.trim();
+            const notesContentStr = document.getElementById('note-text-content').value;
+            
+            if (!titleStr) {
+                alert("Please assign a file title or note name before downloading document.");
+                return;
+            }
+            if (!notesContentStr.trim()) {
+                alert("Cannot save an empty text note workspace file.");
+                return;
+            }
+            
+            const noteTextBlob = new Blob([notesContentStr], { type: "text/plain;charset=utf-8" });
+            const temporaryDownloadAnchor = document.createElement("a");
+            const secureFileName = titleStr.replace(/[^a-z0-9_-]/gi, '_') + ".txt";
+            
+            temporaryDownloadAnchor.href = URL.createObjectURL(noteTextBlob);
+            temporaryDownloadAnchor.download = secureFileName;
+            
+            document.body.appendChild(temporaryDownloadAnchor);
+            temporaryDownloadAnchor.click();
+            document.body.removeChild(temporaryDownloadAnchor);
+            alert(`Document note saved successfully! Your browser will now save "${secureFileName}" to your downloads folder.`);
+        }
+
+        function openBookFile(subjectKey, itemIndex) {
+            const bookItem = textbookDatabase[subjectKey][itemIndex];
+            if(bookItem.isMock) {
+                alert(`Opening asset text preview placeholder for: "${bookItem.title}"`);
+            } else {
+                window.open(bookItem.fileUrl, '_blank');
+            }
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            document.getElementById('nav-login').style.display = 'inline-block';
+            document.getElementById('nav-dashboard').style.display = 'none';
+            document.getElementById('nav-addnotes').style.display = 'none';
+            
+            document.getElementById('about-back-btn').innerHTML = '&larr; Back to login page';
+            document.getElementById('about-back-btn').setAttribute('onclick', "switchView('login-view', 'nav-login')");
+            document.getElementById('contact-back-btn').innerHTML = '&larr; Back to login page';
+            document.getElementById('contact-back-btn').setAttribute('onclick', "switchView('login-view', 'nav-login')");
+            
+            document.getElementById('note-file-name').value = '';
+            document.getElementById('note-text-content').value = '';
+            
+            switchView('login-view', 'nav-login');
+        }
+    </script>
+</body>
+</html>
