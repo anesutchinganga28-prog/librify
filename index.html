@@ -298,22 +298,6 @@
             font-weight: 500;
         }
 
-        .actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #55665c;
-            cursor: pointer;
-        }
-
         .forgot-pass, .back-to-login, .logout-btn {
             color: #178253;
             text-decoration: none;
@@ -630,18 +614,6 @@
             font-weight: 600;
         }
 
-        .connect-pitch-box .highlight-whatsapp {
-            display: inline-block;
-            margin-top: 8px;
-            background-color: #25D366;
-            color: #ffffff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);
-        }
-
         /* Responsive UI */
         @media (max-width: 768px) {
             body {
@@ -816,7 +788,7 @@
 
                 <!-- Textbooks Dynamic List View Container -->
                 <div id="books-list" class="books-list-container">
-                    <!-- Loaded dynamically via JavaScript -->
+                    <!-- Loaded dynamically via Supabase -->
                 </div>
 
                 <!-- File Uploader Container Element Module -->
@@ -893,7 +865,7 @@
                 <p><span class="back-to-login" id="about-back-btn" onclick="switchView('login-view', 'nav-login')">&larr; Back to login page</span></p>
             </div>
 
-            <!-- 7. CONTACT VIEW (UPDATED: Textboxes removed, catchy platform pitch added) -->
+            <!-- 7. CONTACT VIEW -->
             <div id="contact-view" class="view-panel">
                 <h2>Get in touch</h2>
                 <p class="subtitle">Have questions or feedback? We are here to help!</p>
@@ -903,7 +875,7 @@
                     <p>Got a burning question, or need quick academic assistance? Contact us directly on our Whatsapp Number below!</p>
                 </div>
                 
-                <!-- Contact Social Details Box Metadata Box -->
+                <!-- Contact Social Details Box -->
                 <div class="contact-socials-grid">
                     <div class="social-item-row">
                         <span class="social-label-heading">📘 Facebook:</span>
@@ -927,14 +899,22 @@
         </div>
     </div>
 
-    <!-- Interface, Navigation & Authentication Logic -->
+    <!-- Supabase Core Client Library SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Interface, Navigation & Cloud Database Auth Logic -->
     <script>
+        // Connected to Supabase Project: qagwtyjuxtjlibdvqetk
+        const SUPABASE_URL = "https://qagwtyjuxtjlibdvqetk.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable__q37-fmkAKRYCB3zfi80sg_S_mRcHmw";
+
+        // Initialize connection configuration
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         let isLoggedIn = false;
         let selectedTier = "";
         let selectedDept = "";
         let currentActiveSubject = "";
-
-        const textbookDatabase = {};
 
         const zimbabweCurriculumData = {
             "O-Level / ZJC": {
@@ -1041,11 +1021,24 @@
             switchView('materials-view', 'nav-dashboard');
         }
 
-        function renderBooksList(filterQuery = '') {
+        // Real-time asynchronous fetching of books from Supabase Table
+        async function renderBooksList(filterQuery = '') {
             const listContainer = document.getElementById('books-list');
-            listContainer.innerHTML = '';
+            listContainer.innerHTML = '<p style="color:#66776d; font-size:0.85rem; font-style:italic; padding:15px 0;">Loading library assets...</p>';
             
-            const books = textbookDatabase[currentActiveSubject] || [];
+            let { data: books, error } = await supabaseClient
+                .from('books')
+                .select('*')
+                .eq('subject', currentActiveSubject)
+                .eq('tier', selectedTier);
+
+            if (error) {
+                console.error("Database Fetch error:", error);
+                listContainer.innerHTML = `<p style="color:#de3a3a; font-size:0.85rem; padding:15px 0;">Error loading matching assets.</p>`;
+                return;
+            }
+
+            listContainer.innerHTML = '';
             const filteredBooks = books.filter(b => b.title.toLowerCase().includes(filterQuery.toLowerCase()));
             
             if(books.length === 0) {
@@ -1054,13 +1047,11 @@
             }
 
             if(filteredBooks.length === 0) {
-                listContainer.innerHTML = `<p style="color:#de3a3a; font-size:0.85rem; font-style:italic; padding:15px 0;">No books found matching your current search query filter.</p>`;
+                listContainer.innerHTML = `<p style="color:#de3a3a; font-size:0.85rem; font-style:italic; padding:15px 0;">No matching items found.</p>`;
                 return;
             }
             
             filteredBooks.forEach((book) => {
-                const structuralMasterIndex = books.findIndex(originalBook => originalBook.title === book.title);
-                
                 const itemRow = document.createElement('div');
                 itemRow.className = 'book-list-item';
                 itemRow.innerHTML = `
@@ -1068,7 +1059,7 @@
                         <span class="book-list-icon">📘</span>
                         <div class="book-list-title" title="${book.title}">${book.title}</div>
                     </div>
-                    <button class="open-list-btn" onclick="openBookFile('${currentActiveSubject}', ${structuralMasterIndex})">Open</button>
+                    <button class="open-list-btn" onclick="window.open('${book.fileUrl}', '_blank')">Open</button>
                 `;
                 listContainer.appendChild(itemRow);
             });
@@ -1079,7 +1070,8 @@
             renderBooksList(currentSearchValue);
         }
 
-        function handleBookUploadSave() {
+        // Upload physical resource document file directly to Supabase Public Bucket
+        async function handleBookUploadSave() {
             const titleInput = document.getElementById('new-book-title').value.trim();
             const fileInput = document.getElementById('new-book-file');
             
@@ -1093,19 +1085,49 @@
             }
             
             const selectedFile = fileInput.files[0];
-            const constructedUrl = URL.createObjectURL(selectedFile);
+            const uniqueFileName = Date.now() + "_" + selectedFile.name.replace(/[^a-zA-Z0-9.]/g, "_");
             
-            if(!textbookDatabase[currentActiveSubject]) {
-                textbookDatabase[currentActiveSubject] = [];
+            alert("Uploading asset to shared storage server... Please wait.");
+
+            // 1. Send file binary to 'books' bucket
+            const { data: storageData, error: storageError } = await supabaseClient
+                .storage
+                .from('books')
+                .upload(uniqueFileName, selectedFile);
+
+            if (storageError) {
+                console.error("Storage upload failed:", storageError);
+                alert("File transfer broke. Verify bucket policies are set to public.");
+                return;
+            }
+
+            // 2. Fetch direct access link
+            const { data: publicUrlData } = supabaseClient
+                .storage
+                .from('books')
+                .getPublicUrl(uniqueFileName);
+
+            const permanentFileUrl = publicUrlData.publicUrl;
+
+            // 3. Document details reference in the 'books' dataset table
+            const { error: dbError } = await supabaseClient
+                .from('books')
+                .insert([
+                    { 
+                        title: titleInput, 
+                        fileUrl: permanentFileUrl, 
+                        subject: currentActiveSubject, 
+                        tier: selectedTier 
+                    }
+                ]);
+
+            if (dbError) {
+                console.error("Database connection failure:", dbError);
+                alert("File successfully saved, but catalog indexing failed.");
+                return;
             }
             
-            textbookDatabase[currentActiveSubject].push({
-                title: titleInput,
-                fileUrl: constructedUrl,
-                isMock: false
-            });
-            
-            alert(`"${titleInput}" successfully uploaded and saved to library archive!`);
+            alert(`"${titleInput}" successfully uploaded permanently!`);
             
             document.getElementById('new-book-title').value = '';
             fileInput.value = '';
@@ -1137,16 +1159,7 @@
             document.body.appendChild(temporaryDownloadAnchor);
             temporaryDownloadAnchor.click();
             document.body.removeChild(temporaryDownloadAnchor);
-            alert(`Document note saved successfully! Your browser will now save "${secureFileName}" to your downloads folder.`);
-        }
-
-        function openBookFile(subjectKey, itemIndex) {
-            const bookItem = textbookDatabase[subjectKey][itemIndex];
-            if(bookItem.isMock) {
-                alert(`Opening asset text preview placeholder for: "${bookItem.title}"`);
-            } else {
-                window.open(bookItem.fileUrl, '_blank');
-            }
+            alert(`Document note saved successfully!`);
         }
 
         function handleLogout() {
