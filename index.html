@@ -612,7 +612,7 @@
             font-size: 0.95rem;
             line-height: 1.5;
             font-weight: 600;
-        }
+            }
 
         /* Responsive UI */
         @media (max-width: 768px) {
@@ -837,7 +837,7 @@
                     <div class="profile-section">
                         <div class="photo-placeholder">
                             <img src="anesu.jpg" alt="Anesu T. Chinganga" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
+                        </div>
                         <div class="creator-details">
                             <h3>Anesu T. Chinganga</h3>
                             <p>Creator & Lead Architect of Librify</p>
@@ -851,7 +851,7 @@
                     <div class="profile-section">
                         <div class="photo-placeholder">
                             <img src="takunda.jpg" alt="Takunda J. Musarandega" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
+                        </div>
                         <div class="creator-details">
                             <h3>Takunda J. Musarandega</h3>
                             <p>UE (User Experience) Designer</p>
@@ -1058,12 +1058,21 @@
             filteredBooks.forEach((book) => {
                 const itemRow = document.createElement('div');
                 itemRow.className = 'book-list-item';
+                
+                // Architectural Fix: Determine routing engine layout based on extension matching
+                const targetUrl = book.fileUrl;
+                let processedViewUrl = targetUrl;
+
+                if (targetUrl.toLowerCase().endsWith('.doc') || targetUrl.toLowerCase().endsWith('.docx')) {
+                    processedViewUrl = `https://docs.google.com/gview?url=${encodeURIComponent(targetUrl)}&embedded=true`;
+                }
+
                 itemRow.innerHTML = `
                     <div class="book-item-meta">
                         <span class="book-list-icon">📘</span>
                         <div class="book-list-title" title="${book.title}">${book.title}</div>
                     </div>
-                    <button class="open-list-btn" onclick="window.open('${book.fileUrl}', '_blank')">Open</button>
+                    <button class="open-list-btn" onclick="window.open('${processedViewUrl}', '_blank')">Open</button>
                 `;
                 listContainer.appendChild(itemRow);
             });
@@ -1093,11 +1102,25 @@
             
             alert("Uploading asset to shared storage server... Please wait.");
 
+            // Architectural Fix: Dynamically set contentType options block to match files
+            let customContentType = 'application/octet-stream';
+            if (selectedFile.name.toLowerCase().endsWith('.pdf')) {
+                customContentType = 'application/pdf';
+            } else if (selectedFile.name.toLowerCase().endsWith('.docx')) {
+                customContentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            } else if (selectedFile.name.toLowerCase().endsWith('.doc')) {
+                customContentType = 'application/msword';
+            }
+
             // 1. Send file binary to 'books' bucket
             const { data: storageData, error: storageError } = await supabaseClient
                 .storage
                 .from('books')
-                .upload(uniqueFileName, selectedFile);
+                .upload(uniqueFileName, selectedFile, {
+                    cacheControl: '3600',
+                    upsert: false,
+                    contentType: customContentType
+                });
 
             if (storageError) {
                 console.error("Storage upload failed:", storageError);
@@ -1183,12 +1206,5 @@
             switchView('login-view', 'nav-login');
         }
     </script>
-    <!--  THE REWRITTEN HTML ELEMENT FOR DOCX VIEWS -->
-<a href="https://docs.google.com/gview?url=YOUR_SUPABASE_FILE_URL_HERE&embedded=true" 
-   target="_blank" 
-   class="book-link-btn" 
-   style="text-decoration: none; color: #178253; font-weight: bold;">
-   Open Document In Browser
-</a>
 </body>
 </html>
